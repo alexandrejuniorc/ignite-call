@@ -49,6 +49,8 @@ export default function Register() {
         name: data.name,
         username: data.username,
       })
+
+      await router.push('/register/connect-calendar')
     } catch (err) {
       // se for um erro da intância axios e possuir o erro irá mostrar o alerta
       if (err instanceof AxiosError && err?.response?.data?.message) {
