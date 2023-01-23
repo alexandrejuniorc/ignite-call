@@ -4,9 +4,12 @@ import GoogleProvider from 'next-auth/providers/google'
 import { PrismaAdapter } from '../../../lib/next-auth/prisma-adapter'
 import { NextApiRequest, NextApiResponse } from 'next'
 
-export const buildNextAuthOptions(): NextAuthOptions  {
+export function buildNextAuthOptions(
+  req: NextApiRequest,
+  res: NextApiResponse,
+): NextAuthOptions {
   return {
-    adapter: PrismaAdapter(),
+    adapter: PrismaAdapter(req, res),
 
     // Configure one or more authentication providers
     providers: [
@@ -29,16 +32,17 @@ export const buildNextAuthOptions(): NextAuthOptions  {
         ) {
           return '/register/connect-calendar/?error=permissions'
         }
-  
+
         // se tiver o escopo necessário irá retornar true o if já serve para fazer essa checagem e redirecionar para outra página
         return true
       },
     },
   }
- 
 }
+
+// export default NextAuth(buildNextAuthOptions)
 
 export default async function auth(req: NextApiRequest, res: NextApiResponse) {
   // Do whatever you want here, before the request is passed down to `NextAuth`
-  return await NextAuth(req, res, authOptions)
+  return await NextAuth(req, res, buildNextAuthOptions(req, res))
 }
