@@ -10,24 +10,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// guarda o registro dos usuários
 model User {
   id         String  @id @default(uuid())
   username   String  @unique
   name       String
+  bio        String?
   email      String? @unique
   avatar_url String?
 
   created_at DateTime @default(now())
 
-  accounts Account[]
-  sessions Session[]
+  accounts      Account[]
+  sessions      Session[]
+  timeIntervals UserTimeInterval[]
 
   @@map("users")
 }
 
-// integração de um usuário com algum provider
-// quando logar por exemplo em google e github, vai ter um account pra cada, porém o usuário é o mesmo
 model Account {
   id                  String  @id @default(cuid())
   user_id             String
@@ -48,7 +47,6 @@ model Account {
   @@map("accounts")
 }
 
-// cada vez que o usuário fizer login em uma máquina diferente eu vou ter uma sessão
 model Session {
   id            String   @id @default(cuid())
   session_token String   @unique
@@ -57,4 +55,16 @@ model Session {
   user          User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@map("sessions")
+}
+
+model UserTimeInterval {
+  id                    String @id @default(uuid())
+  week_day              Int
+  time_start_in_minutes Int
+  time_end_in_minutes   Int
+
+  user    User   @relation(fields: [user_id], references: [id])
+  user_id String
+
+  @@map("user_time_intervals")
 }
