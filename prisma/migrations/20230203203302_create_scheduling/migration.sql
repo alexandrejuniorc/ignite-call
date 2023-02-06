@@ -6,6 +6,6 @@ CREATE TABLE "schedulings" (
     "email" TEXT NOT NULL,
     "observations" TEXT,
     "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "userId" TEXT NOT NULL,
-    CONSTRAINT "schedulings_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    "user_id" TEXT NOT NULL,
+    CONSTRAINT "schedulings_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
